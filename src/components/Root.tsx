@@ -1,5 +1,4 @@
-import { TonConnectUIProvider } from '@tonconnect/ui-react';
-import { type FC, useEffect, useMemo } from 'react';
+import { type FC, useEffect } from 'react';
 import WebApp from '@twa-dev/sdk';
 
 import { App } from '@/components/App.tsx';
@@ -22,9 +21,6 @@ const ErrorBoundaryError: FC<{ error: unknown }> = ({ error }) => (
 
 const Inner: FC = () => {
   const debug = WebApp.initDataUnsafe.start_param === 'debug';
-  const manifestUrl = useMemo(() => {
-    return new URL('tonconnect-manifest.json', window.location.href).toString();
-  }, []);
 
   // Enable debug mode to see all the methods sent and events received.
   useEffect(() => {
@@ -34,9 +30,7 @@ const Inner: FC = () => {
   }, [debug]);
 
   return (
-    <TonConnectUIProvider manifestUrl={manifestUrl}>
       <App/>
-    </TonConnectUIProvider>
   );
 };
 
