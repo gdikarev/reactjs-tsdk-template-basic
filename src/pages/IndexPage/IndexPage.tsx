@@ -16,5 +16,5 @@ export const IndexPage: FC = () => {
               </Container>
           </Box>
       </Link>
-);
+    );
 };
