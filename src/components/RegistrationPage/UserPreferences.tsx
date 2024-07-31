@@ -1,10 +1,7 @@
-import FormControl from '@mui/material/FormControl';
-import RadioGroup from "@mui/material/RadioGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FormLabel from "@mui/material/FormLabel";
-import Radio from '@mui/material/Radio';
-import Slider from '@mui/material/Slider';
-import { Box } from '@mui/material';
+import {
+    Box, Slider, FormControl, FormLabel,
+    FormControlLabel, RadioGroup, Radio
+} from '@mui/material';
 
 type UserPreferences = {
     search_gender: string,

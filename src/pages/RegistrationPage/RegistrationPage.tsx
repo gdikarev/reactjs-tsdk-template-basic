@@ -16,7 +16,6 @@ type FormData = {
     locale: string,
     search_age_from: number,
     search_age_to: number,
-    city_id: number,
     photos: Array<FileData>
 }
 
@@ -24,12 +23,11 @@ const INIT_DATA: FormData = {
     name: "",
     email: "",
     gender: "",
-    search_gender: "f",
+    search_gender: "",
     birthday: "",
     locale: "en-US",
     search_age_from: 18,
-    search_age_to: 99,
-    city_id: 1,
+    search_age_to: 60,
     photos: []
 }
 
@@ -66,7 +64,13 @@ export const RegistrationPage: FC = () => {
 
     return (
         <form onSubmit={onSubmit}
-              style={{height: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'space-between'}}>
+              style={{
+                  height: '90vh',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  overflow: 'hidden'
+              }}>
             <Box position="absolute" top={8} right={8}>
                 {currentStepIndex + 1} / {steps.length}
             </Box>
@@ -76,7 +80,7 @@ export const RegistrationPage: FC = () => {
                     {step}
                 </Box>
             </Container>
-            <Box position="fixed" bottom={0} left={0} right={0} bgcolor="white" padding={2}>
+            <Box position="fixed" bottom={20} left={0} right={0} bgcolor="white" padding={2}>
                 <Container maxWidth="xs">
                     <Box display="flex" justifyContent="space-between">
                         <Button variant="text" onClick={back} fullWidth>

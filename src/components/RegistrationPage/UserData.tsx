@@ -1,14 +1,11 @@
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import dayjs from "dayjs";
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
-import TextField from '@mui/material/TextField';
-import { Box } from '@mui/material';
+
+import {
+    Box, TextField, FormLabel, FormControl,
+    FormControlLabel, RadioGroup, Radio
+} from '@mui/material';
 
 type UserData = {
     name: string,
@@ -23,7 +20,7 @@ type UserDataProps = UserData & {
 
 export function UserData({name, email, birthday, gender, updateFields} : UserDataProps) {
     return (
-        <Box display="flex" flexDirection="column" width="100%" height="100%" padding={2}>
+        <Box display="flex" flexDirection="column" width="90vh" height="100vh" padding={2}>
             <FormControl fullWidth>
                 <TextField
                     id="name"
@@ -52,7 +49,7 @@ export function UserData({name, email, birthday, gender, updateFields} : UserDat
                     <Box marginY={2}>
                         <DatePicker
                             label="Date of birth"
-                            defaultValue={dayjs(birthday)}
+                            defaultValue={birthday ? dayjs(birthday) : null}
                             onChange={newValue => updateFields({ birthday: newValue?.format('YYYY-MM-DD') || '' })}
                             // renderInput={(params) => <TextField {...params} fullWidth />}
                         />
