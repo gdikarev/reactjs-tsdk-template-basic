@@ -1,20 +1,29 @@
 import type { FC } from 'react';
+import { Box, Container, Button, Grid } from "@mui/material";
 
 import { Link } from '@/components/Link/Link.tsx';
-import {Box, Container, Button} from "@mui/material";
 
 export const IndexPage: FC = () => {
   return (
-      <Link to="/registration">
-          <Box position="fixed" bottom={0} left={0} right={0} bgcolor="white" padding={2}>
-              <Container maxWidth="xs">
-                  <Box display="flex" justifyContent="center">
-                      <Button variant="contained" fullWidth>
-                          Register
-                      </Button>
-                  </Box>
-              </Container>
-          </Box>
-      </Link>
+      <Box position="fixed" bottom={0} left={0} right={0} bgcolor="white" padding={2}>
+          <Container maxWidth="xs">
+              <Grid container spacing={2}>
+                  <Grid item xs={6}>
+                      <Link to='/registration' style={{ textDecoration: 'none' }}>
+                          <Button variant="contained" fullWidth>
+                              Register
+                          </Button>
+                      </Link>
+                  </Grid>
+                  <Grid item xs={6}>
+                      <Link to='/matches' style={{ textDecoration: 'none' }}>
+                          <Button variant="contained" fullWidth>
+                              Matches
+                          </Button>
+                      </Link>
+                  </Grid>
+              </Grid>
+          </Container>
+      </Box>
     );
 };

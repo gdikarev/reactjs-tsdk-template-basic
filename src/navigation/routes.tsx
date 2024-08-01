@@ -4,7 +4,8 @@ import { IndexPage } from '@/pages/IndexPage/IndexPage';
 import { InitDataPage } from '@/pages/InitDataPage/InitDataPage';
 import { LaunchParamsPage } from '@/pages/LaunchParamsPage/LaunchParamsPage.tsx';
 import { ThemeParamsPage } from '@/pages/ThemeParamsPage/ThemeParamsPage.tsx';
-import {RegistrationPage} from "@/pages/RegistrationPage/RegistrationPage.tsx";
+import { RegistrationPage } from "@/pages/RegistrationPage/RegistrationPage.tsx";
+import Matches from "@/pages/Matches/Matches.tsx";
 
 interface Route {
   path: string;
@@ -19,4 +20,5 @@ export const routes: Route[] = [
   { path: '/theme-params', Component: ThemeParamsPage, title: 'Theme Params' },
   { path: '/launch-params', Component: LaunchParamsPage, title: 'Launch Params' },
   { path: '/registration', Component: RegistrationPage, title: 'Registration' },
+  { path: '/matches', Component: Matches, title: 'Matches' },
 ];
