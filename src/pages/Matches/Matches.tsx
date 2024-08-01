@@ -26,31 +26,31 @@ const mockData = [
 ];
 
 const Matches = () => {
-    const [currentSlide, setCurrentSlide] = useState(0);
+    // const [currentSlide, setCurrentSlide] = useState(0);
     const [data, setData] = useState<Person[]>([]);
-    const [likes, setLikes] = useState<Person[]>([]);
-    const [unlikes, setUnlikes] = useState<Person[]>([]);
+    // const [likes, setLikes] = useState<Person[]>([]);
+    // const [unlikes, setUnlikes] = useState<Person[]>([]);
 
-    const handleBeforeChange = (oldIndex: number, newIndex: number) => {
-        const direction = newIndex > oldIndex ? 'right' : 'left';
+    // const handleBeforeChange = (oldIndex: number, newIndex: number) => {
+    //     const direction = newIndex > oldIndex ? 'right' : 'left';
+    //
+    //     if (direction === 'left') {
+    //         setUnlikes((prev) => ([...prev, mockData[oldIndex]]))
+    //     }
+    //
+    //     if (direction === 'right') {
+    //         setLikes((prev) => ([...prev, mockData[oldIndex]]))
+    //     }
+    //
+    //     // setData((prev) => prev.filter((_, i) => i !== oldIndex))
+    // };
 
-        if (direction === 'left') {
-            setUnlikes((prev) => ([...prev, mockData[oldIndex]]))
-        }
-
-        if (direction === 'right') {
-            setLikes((prev) => ([...prev, mockData[oldIndex]]))
-        }
-
-        // setData((prev) => prev.filter((_, i) => i !== oldIndex))
-    };
-
-    const handleAfterChange = (currentIndex: number) => {
-        setCurrentSlide(currentIndex);
-        if (data.length <= 2) {
-            setData(prev => [...prev, ...mockData]);
-        }
-    };
+    // const handleAfterChange = (currentIndex: number) => {
+    //     setCurrentSlide(currentIndex);
+    //     if (data.length <= 2) {
+    //         setData(prev => [...prev, ...mockData]);
+    //     }
+    // };
 
     useEffect(() => {
         setData(mockData);

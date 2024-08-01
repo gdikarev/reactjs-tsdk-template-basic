@@ -1,5 +1,5 @@
 import React from "react";
-import Slider, { Settings } from 'react-slick';
+import { Settings } from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import styled from '@emotion/styled';
@@ -66,7 +66,7 @@ const Swiper = (props: Swiper) => {
     };
 
     const outOfFrame = (name: string) => {
-        // ...
+        console.log('outOfFrame: ', name);
     };
 
     return (
