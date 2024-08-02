@@ -12,7 +12,10 @@ export function useTelegramButtons({ onBack, onNext, isLastStep }: UseTelegramBu
         const [backButton] = initBackButton();
         const [mainButton] = initMainButton();
 
+        backButton.show()
         backButton.on('click', () => {
+            if (isLastStep) backButton.hide()
+
             isLastStep = false
             onBack()
         });
@@ -24,7 +27,9 @@ export function useTelegramButtons({ onBack, onNext, isLastStep }: UseTelegramBu
             if (!isLastStep) {
                 onNext();
             } else {
-                alert('Submission logic here');
+                console.log('Submit')
+                mainButton.hide()
+                // alert('Submission logic here');
             }
         });
 

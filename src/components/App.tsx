@@ -1,4 +1,4 @@
-import WebApp from '@twa-dev/sdk';
+import { initBackButton, retrieveLaunchParams } from '@telegram-apps/sdk';
 import { AppRoot } from '@telegram-apps/telegram-ui';
 import { type FC, useEffect } from 'react';
 import {
@@ -12,24 +12,38 @@ import {
 
 import { routes } from '@/navigation/routes.tsx';
 
+const lp = retrieveLaunchParams()
+
 function BackButtonManipulator() {
   const location = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
+    const [backButton] = initBackButton();
+
     function onClick() {
       navigate(-1);
     }
-    WebApp.BackButton.onClick(onClick);
 
-    return () => WebApp.BackButton.offClick(onClick);
+    backButton.on('click', onClick);
+
+    // Очистка обработчика при размонтировании компонента
+    return () => {
+      backButton.off('click', onClick);
+    };
   }, [navigate]);
 
   useEffect(() => {
+    const [backButton] = initBackButton();
+
     if (location.pathname === '/') {
-      WebApp.BackButton.isVisible && WebApp.BackButton.hide();
+      if (backButton.isVisible) {
+        backButton.hide();
+      }
     } else {
-      !WebApp.BackButton.isVisible && WebApp.BackButton.show();
+      if (!backButton.isVisible) {
+        backButton.show();
+      }
     }
   }, [location]);
 
@@ -38,8 +52,8 @@ function BackButtonManipulator() {
 
 export const App: FC = () => (
   <AppRoot
-    appearance={WebApp.colorScheme}
-    platform={['macos', 'ios'].includes(WebApp.platform) ? 'ios' : 'base'}
+    appearance="light"
+    platform={['macos', 'ios'].includes(lp.platform) ? 'ios' : 'base'}
   >
     <BrowserRouter>
       <BackButtonManipulator/>

@@ -1,5 +1,5 @@
 import { type FC, useEffect } from 'react';
-import WebApp from '@twa-dev/sdk';
+import { retrieveLaunchParams } from '@telegram-apps/sdk';
 
 import { App } from '@/components/App.tsx';
 import { ErrorBoundary } from '@/components/ErrorBoundary.tsx';
@@ -19,8 +19,10 @@ const ErrorBoundaryError: FC<{ error: unknown }> = ({ error }) => (
   </div>
 );
 
+const { initData } = retrieveLaunchParams();
+
 const Inner: FC = () => {
-  const debug = WebApp.initDataUnsafe.start_param === 'debug';
+  const debug = initData?.startParam === 'debug';
 
   // Enable debug mode to see all the methods sent and events received.
   useEffect(() => {

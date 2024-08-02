@@ -7,7 +7,7 @@ import {FileData} from "@/shared/interface/registration.ts";
 import {FC, FormEvent, useState} from 'react';
 import { Box, Container, Button } from '@mui/material';
 
-import { retrieveLaunchParams } from '@telegram-apps/sdk';
+import {retrieveLaunchParams} from '@telegram-apps/sdk';
 
 type FormData = {
     name: string,
@@ -65,12 +65,6 @@ export const RegistrationPage: FC = () => {
         if (!isLastStep) return next()
         alert(JSON.stringify(data))
     }
-    //
-    // useTelegramButtons({
-    //     onBack: back,
-    //     onNext: next,
-    //     isLastStep
-    // });
 
     return (
         <form onSubmit={onSubmit}
