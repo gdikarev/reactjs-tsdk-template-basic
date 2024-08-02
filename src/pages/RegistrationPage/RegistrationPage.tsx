@@ -5,7 +5,9 @@ import {useMultistepForm} from "@/hooks/useMultistepForm.tsx";
 import {FileData} from "@/shared/interface/registration.ts";
 
 import {FC, FormEvent, useState} from 'react';
-import { Box, Button, Container } from '@mui/material';
+import { Box, Container, Button } from '@mui/material';
+
+import { retrieveLaunchParams } from '@telegram-apps/sdk';
 
 type FormData = {
     name: string,
@@ -19,8 +21,10 @@ type FormData = {
     photos: Array<FileData>
 }
 
+const { initData } = retrieveLaunchParams();
+
 const INIT_DATA: FormData = {
-    name: "",
+    name: initData?.user?.firstName ?? "",
     email: "",
     gender: "",
     search_gender: "",
@@ -61,6 +65,12 @@ export const RegistrationPage: FC = () => {
         if (!isLastStep) return next()
         alert(JSON.stringify(data))
     }
+    //
+    // useTelegramButtons({
+    //     onBack: back,
+    //     onNext: next,
+    //     isLastStep
+    // });
 
     return (
         <form onSubmit={onSubmit}
@@ -80,7 +90,7 @@ export const RegistrationPage: FC = () => {
                     {step}
                 </Box>
             </Container>
-            <Box position="fixed" bottom={20} left={0} right={0} bgcolor="white" padding={2}>
+            <Box position="fixed" bottom={20} left={0} right={0} padding={2}>
                 <Container maxWidth="xs">
                     <Box display="flex" justifyContent="space-between">
                         <Button variant="text" onClick={back} fullWidth>
