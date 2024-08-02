@@ -1,8 +1,10 @@
 import { type FC, type MouseEventHandler, useCallback } from 'react';
-import WebApp from '@twa-dev/sdk';
+import { initUtils } from '@telegram-apps/sdk';
 import { Link as RouterLink, type LinkProps } from 'react-router-dom';
 
 import './Link.css';
+
+const utils = initUtils();
 
 export const Link: FC<LinkProps> = ({
   className,
@@ -30,7 +32,7 @@ export const Link: FC<LinkProps> = ({
 
     if (isExternal) {
       e.preventDefault();
-      WebApp.openLink(targetUrl.toString());
+      utils.openLink(targetUrl.toString());
     }
   }, [to, propsOnClick]);
 

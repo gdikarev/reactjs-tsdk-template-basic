@@ -1,5 +1,5 @@
 import ReactDOM from 'react-dom/client';
-import '@twa-dev/sdk';
+import '@telegram-apps/sdk';
 
 import { Root } from '@/components/Root';
 
