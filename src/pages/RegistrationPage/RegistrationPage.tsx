@@ -8,6 +8,7 @@ import {FC, FormEvent, useState} from 'react';
 import { Box, Container, Button } from '@mui/material';
 
 import {retrieveLaunchParams} from '@telegram-apps/sdk';
+import {useAuth} from "@/hooks/useAuth.tsx";
 
 type FormData = {
     name: string,
@@ -37,6 +38,7 @@ const INIT_DATA: FormData = {
 
 export const RegistrationPage: FC = () => {
     const [data, setData] = useState(INIT_DATA)
+    const { login } = useAuth();
 
     function updateFields(fields: Partial<FormData>) {
         setData(prev => {
@@ -64,6 +66,7 @@ export const RegistrationPage: FC = () => {
         e.preventDefault()
         if (!isLastStep) return next()
         alert(JSON.stringify(data))
+        login();
     }
 
     return (
