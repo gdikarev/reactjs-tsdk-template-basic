@@ -1,16 +1,17 @@
-import type { ComponentType, JSX } from 'react';
-
-import { IndexPage } from '@/pages/IndexPage/IndexPage';
-import {RegistrationPage} from "@/pages/RegistrationPage/RegistrationPage.tsx";
-
-interface Route {
-  path: string;
-  Component: ComponentType;
-  title?: string;
-  icon?: JSX.Element;
+interface Routes {
+  home: string;
+  registration: string;
+  login: string;
+  matches: string;
+  profile: string;
+  settings: string;
 }
 
-export const routes: Route[] = [
-  { path: '/', Component: IndexPage },
-  { path: '/registration', Component: RegistrationPage, title: 'Registration' },
-];
+export const routes: Routes = {
+  home: '/',
+  registration: '/registration',
+  login: '/login',
+  matches: '/matches',
+  profile: '/profile',
+  settings: '/settings',
+};

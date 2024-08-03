@@ -2,15 +2,13 @@ import { initBackButton, retrieveLaunchParams } from '@telegram-apps/sdk';
 import { AppRoot } from '@telegram-apps/telegram-ui';
 import { type FC, useEffect } from 'react';
 import {
-  Navigate,
-  Route,
   BrowserRouter,
-  Routes,
   useLocation,
   useNavigate,
 } from 'react-router-dom';
 
-import { routes } from '@/navigation/routes.tsx';
+import Router from "@/navigation/Router.tsx";
+import { AuthProvider } from "@/hooks/useAuth.tsx";
 
 const lp = retrieveLaunchParams()
 
@@ -56,11 +54,10 @@ export const App: FC = () => (
     platform={['macos', 'ios'].includes(lp.platform) ? 'ios' : 'base'}
   >
     <BrowserRouter>
-      <BackButtonManipulator/>
-      <Routes>
-        {routes.map((route) => <Route key={route.path} {...route} />)}
-        <Route path='*' element={<Navigate to='/'/>}/>
-      </Routes>
+      <AuthProvider>
+        <BackButtonManipulator/>
+        <Router />
+      </AuthProvider>
     </BrowserRouter>
   </AppRoot>
 );
