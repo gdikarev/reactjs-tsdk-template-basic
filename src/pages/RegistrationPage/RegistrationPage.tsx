@@ -4,11 +4,13 @@ import {UserPreferences} from "@/components/RegistrationPage/UserPreferences.tsx
 import {useMultistepForm} from "@/hooks/useMultistepForm.tsx";
 import {FileData} from "@/shared/interface/registration.ts";
 
-import {FC, FormEvent, useState} from 'react';
-import { Box, Container, Button } from '@mui/material';
+import {FC, useEffect, useState} from 'react';
+import { Box, Container } from '@mui/material';
 
-import {retrieveLaunchParams} from '@telegram-apps/sdk';
+import {initBackButton, initMainButton, retrieveLaunchParams} from '@telegram-apps/sdk';
 import {useAuth} from "@/hooks/useAuth.tsx";
+
+import { useForm } from 'react-hook-form';
 
 type FormData = {
     name: string,
@@ -38,7 +40,52 @@ const INIT_DATA: FormData = {
 
 export const RegistrationPage: FC = () => {
     const [data, setData] = useState(INIT_DATA)
+
     const { login } = useAuth();
+
+    const { handleSubmit} = useForm({
+    });
+
+    const [mainButton] = initMainButton();
+    const [backButton] = initBackButton();
+
+    const onSubmit = (): void => {
+        next()
+        if (isLastStep) {
+            // TODO send registration request
+            login()
+        }
+    };
+
+    const onBack = (): void => {
+        back()
+    };
+
+    useEffect(() => {
+        mainButton.show()
+        mainButton.setText(isLastStep ? 'Finish' : 'Continue');
+
+        const handleClick = handleSubmit(onSubmit);
+
+        mainButton.on('click', handleClick);
+
+        return () => {
+            mainButton.off('click', handleClick);
+            mainButton.hide(); // Скрыть кнопку при размонтировании компонента
+        };
+    }, [mainButton, handleSubmit]);
+
+    useEffect(() => {
+        backButton.show()
+        backButton.on('click', onBack);
+
+        if (isFirstStep) backButton.hide()
+
+        return () => {
+            backButton.off('click', onBack);
+            backButton.hide();
+        };
+    }, [backButton]);
 
     function updateFields(fields: Partial<FormData>) {
         setData(prev => {
@@ -51,6 +98,7 @@ export const RegistrationPage: FC = () => {
         currentStepIndex,
         step,
         isLastStep,
+        isFirstStep,
         back,
         next
     } = useMultistepForm([
@@ -62,15 +110,8 @@ export const RegistrationPage: FC = () => {
         <UserPreferences {...data} updateFields={updateFields}/>
     ])
 
-    function onSubmit(e: FormEvent) {
-        e.preventDefault()
-        if (!isLastStep) return next()
-        alert(JSON.stringify(data))
-        login();
-    }
-
     return (
-        <form onSubmit={onSubmit}
+        <form
               style={{
                   height: '90vh',
                   display: 'flex',
@@ -87,18 +128,6 @@ export const RegistrationPage: FC = () => {
                     {step}
                 </Box>
             </Container>
-            <Box position="fixed" bottom={20} left={0} right={0} padding={2}>
-                <Container maxWidth="xs">
-                    <Box display="flex" justifyContent="space-between">
-                        <Button variant="text" onClick={back} fullWidth>
-                            Back
-                        </Button>
-                        <Button variant="contained" type="submit" fullWidth>
-                            {isLastStep ? "Finish" : "Continue"}
-                        </Button>
-                    </Box>
-                </Container>
-            </Box>
         </form>
     );
 };
