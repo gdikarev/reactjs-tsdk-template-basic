@@ -52,6 +52,8 @@ export const RegistrationPage: FC = () => {
     const onSubmit = (): void => {
         next()
         if (isLastStep) {
+            mainButton.hide()
+            backButton.hide()
             // TODO send registration request
             login()
         }
@@ -62,6 +64,7 @@ export const RegistrationPage: FC = () => {
     };
 
     useEffect(() => {
+        mainButton.enable()
         mainButton.show()
         mainButton.setText(isLastStep ? 'Finish' : 'Continue');
 
@@ -71,19 +74,17 @@ export const RegistrationPage: FC = () => {
 
         return () => {
             mainButton.off('click', handleClick);
-            mainButton.hide(); // Скрыть кнопку при размонтировании компонента
         };
     }, [mainButton, handleSubmit]);
 
     useEffect(() => {
-        backButton.show()
+        if (!isFirstStep) backButton.show()
         backButton.on('click', onBack);
 
         if (isFirstStep) backButton.hide()
 
         return () => {
             backButton.off('click', onBack);
-            backButton.hide();
         };
     }, [backButton]);
 
