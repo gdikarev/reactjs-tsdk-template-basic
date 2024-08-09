@@ -1,16 +1,12 @@
 import { ChangeEvent } from 'react';
-import {FileData} from "@/shared/interface/registration.ts";
 import FormControl from '@mui/material/FormControl';
+import { useFormContext } from 'react-hook-form';
 
-type UserPhotos = {
-    photos: Array<FileData>
-}
-
-type UserPhotosProps = UserPhotos & {
-    updateFields: (fields: Partial<UserPhotos>) => void
-}
+import {UserPhotosProps} from "@/shared/type/userRegistrationData.ts";
 
 export function UserPhotos({ photos, updateFields }: UserPhotosProps) {
+    const { register } = useFormContext();
+
     const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
         const selectedFiles = event.target.files ? Array.from(event.target.files) : [];
         const imageFiles = selectedFiles.filter(file => file.type.startsWith('image/'));
@@ -87,7 +83,7 @@ export function UserPhotos({ photos, updateFields }: UserPhotosProps) {
                             justifyContent: 'center'
                         }}>
                             <span style={{fontSize: '24px', color: '#888'}}>+</span>
-                            <input type={"file"} onChange={handleFileChange} multiple accept="image/*" style={{
+                            <input type={"file"} {...register('photos')} onChange={handleFileChange} multiple accept="image/*" style={{
                                 position: 'absolute',
                                 width: '100%',
                                 height: '100%',
