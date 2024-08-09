@@ -1,24 +1,19 @@
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
-import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
-import dayjs from "dayjs";
-
 import {
     Box, TextField, FormLabel, FormControl,
     FormControlLabel, RadioGroup, Radio
 } from '@mui/material';
 
-type UserData = {
-    name: string,
-    email: string,
-    birthday: string,
-    gender: string,
-}
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
+import dayjs from "dayjs";
 
-type UserDataProps = UserData & {
-    updateFields: (fields: Partial<UserData>) => void
-}
+import {useFormContext} from "react-hook-form";
+
+import {UserDataProps} from "@/shared/type/userRegistrationData.ts";
 
 export function UserData({name, email, birthday, gender, updateFields} : UserDataProps) {
+    const { register } = useFormContext();
+
     return (
         <Box display="flex" flexDirection="column" width="90vh" height="100vh" padding={2}>
             <FormControl fullWidth>
@@ -26,10 +21,11 @@ export function UserData({name, email, birthday, gender, updateFields} : UserDat
                     id="name"
                     label="Name"
                     variant="standard"
-                    defaultValue={name}
-                    onChange={e => updateFields({ name: e.target.value })}
+                    value={name}
                     fullWidth
                     margin="normal"
+                    {...register('name')}
+                    onChange={e => updateFields({ name: e.target.value })}
                 />
             </FormControl>
             <FormControl fullWidth>
@@ -38,10 +34,11 @@ export function UserData({name, email, birthday, gender, updateFields} : UserDat
                     id="email"
                     label="Email"
                     variant="standard"
-                    defaultValue={email}
-                    onChange={e => updateFields({ email: e.target.value })}
+                    value={email}
                     fullWidth
                     margin="normal"
+                    {...register('email')}
+                    onChange={e => updateFields({ email: e.target.value })}
                 />
             </FormControl>
             <FormControl fullWidth>
@@ -64,8 +61,8 @@ export function UserData({name, email, birthday, gender, updateFields} : UserDat
                     value={gender}
                     onChange={e => updateFields({ gender: e.target.value })}
                 >
-                    <FormControlLabel value="f" control={<Radio />} label="Female" />
-                    <FormControlLabel value="m" control={<Radio />} label="Male" />
+                    <FormControlLabel value="f" control={<Radio /> } label="Female" {...register('gender')} />
+                    <FormControlLabel value="m" control={<Radio />} label="Male" {...register('gender')} />
                 </RadioGroup>
             </FormControl>
         </Box>

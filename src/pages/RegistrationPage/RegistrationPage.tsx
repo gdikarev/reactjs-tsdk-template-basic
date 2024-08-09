@@ -2,7 +2,6 @@ import {UserData} from "@/components/RegistrationPage/UserData.tsx";
 import {UserPhotos} from "@/components/RegistrationPage/UserPhotos.tsx";
 import {UserPreferences} from "@/components/RegistrationPage/UserPreferences.tsx";
 import {useMultistepForm} from "@/hooks/useMultistepForm.tsx";
-import {FileData} from "@/shared/interface/registration.ts";
 
 import {FC, useEffect, useState} from 'react';
 import { Box, Container } from '@mui/material';
@@ -10,23 +9,17 @@ import { Box, Container } from '@mui/material';
 import {initBackButton, initMainButton, retrieveLaunchParams} from '@telegram-apps/sdk';
 import {useAuth} from "@/hooks/useAuth.tsx";
 
-import { useForm } from 'react-hook-form';
+import { useForm, FormProvider } from 'react-hook-form';
+import {zodResolver} from "@hookform/resolvers/zod";
 
-type FormData = {
-    name: string,
-    email: string,
-    gender: string,
-    search_gender: string,
-    birthday: string,
-    locale: string,
-    search_age_from: number,
-    search_age_to: number,
-    photos: Array<FileData>
-}
+import {UserRegistrationData} from "@/shared/type/userRegistrationData.ts";
+import {getStepValidationSchema} from "@/validationSchemas/Registration/RegistrationPageSchemas.tsx";
+
+import {FormErrors} from "@/components/RegistrationPage/partial/FormErrors.tsx";
 
 const { initData } = retrieveLaunchParams();
 
-const INIT_DATA: FormData = {
+const INIT_DATA: UserRegistrationData = {
     name: initData?.user?.firstName ?? "",
     email: "",
     gender: "",
@@ -42,57 +35,6 @@ export const RegistrationPage: FC = () => {
     const [data, setData] = useState(INIT_DATA)
 
     const { login } = useAuth();
-
-    const { handleSubmit} = useForm({
-    });
-
-    const [mainButton] = initMainButton();
-    const [backButton] = initBackButton();
-
-    const onSubmit = (): void => {
-        next()
-        if (isLastStep) {
-            mainButton.hide()
-            backButton.hide()
-            // TODO send registration request
-            login()
-        }
-    };
-
-    const onBack = (): void => {
-        back()
-    };
-
-    useEffect(() => {
-        mainButton.enable()
-        mainButton.show()
-        mainButton.setText(isLastStep ? 'Finish' : 'Continue');
-
-        const handleClick = handleSubmit(onSubmit);
-
-        mainButton.on('click', handleClick);
-
-        return () => {
-            mainButton.off('click', handleClick);
-        };
-    }, [mainButton, handleSubmit]);
-
-    useEffect(() => {
-        if (!isFirstStep) backButton.show()
-        backButton.on('click', onBack);
-
-        if (isFirstStep) backButton.hide()
-
-        return () => {
-            backButton.off('click', onBack);
-        };
-    }, [backButton]);
-
-    function updateFields(fields: Partial<FormData>) {
-        setData(prev => {
-            return { ...prev, ...fields }
-        })
-    }
 
     const {
         steps,
@@ -111,24 +53,83 @@ export const RegistrationPage: FC = () => {
         <UserPreferences {...data} updateFields={updateFields}/>
     ])
 
+    const validationSchema = getStepValidationSchema(data, currentStepIndex);
+
+    const methods = useForm({
+        resolver: validationSchema ? zodResolver(validationSchema) : undefined,
+        defaultValues: data
+    });
+
+    const [mainButton] = initMainButton();
+    const [backButton] = initBackButton();
+
+    const onSubmit = (): void => {
+        console.log(data)
+        next()
+        if (isLastStep) {
+            mainButton.hide()
+            backButton.hide()
+            // TODO send registration request
+            login()
+        }
+    };
+
+    const onBack = (): void => {
+        back()
+    };
+
+    useEffect(() => {
+        mainButton.enable()
+        mainButton.show()
+        mainButton.setText(isLastStep ? 'Finish' : 'Continue');
+
+        const handleClick = methods.handleSubmit(onSubmit);
+
+        mainButton.on('click', handleClick);
+
+        return () => {
+            mainButton.off('click', handleClick);
+        };
+    }, [mainButton]);
+
+    useEffect(() => {
+        if (!isFirstStep) backButton.show()
+        backButton.on('click', onBack);
+
+        if (isFirstStep) backButton.hide()
+
+        return () => {
+            backButton.off('click', onBack);
+        };
+    }, [backButton]);
+
+    function updateFields(fields: Partial<UserRegistrationData>) {
+        setData(prev => {
+            return { ...prev, ...fields }
+        })
+    }
+
     return (
-        <form
-              style={{
-                  height: '90vh',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'space-between',
-                  overflow: 'hidden'
-              }}>
-            <Box position="absolute" top={8} right={8}>
-                {currentStepIndex + 1} / {steps.length}
-            </Box>
-            <Container maxWidth="xs"
-                       style={{flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center'}}>
-                <Box flex={1} display="flex" alignItems="center" justifyContent="center">
-                    {step}
+        <FormProvider {...methods}>
+            <form
+                  style={{
+                      height: '90vh',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'space-between',
+                      overflow: 'hidden'
+                  }}>
+                <Box position="absolute" top={8} right={8}>
+                    {currentStepIndex + 1} / {steps.length}
                 </Box>
-            </Container>
-        </form>
+                <Container maxWidth="xs"
+                           style={{flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center'}}>
+                    <Box flex={1} display="flex" alignItems="center" justifyContent="center">
+                        {step}
+                    </Box>
+                </Container>
+            </form>
+            <FormErrors />
+        </FormProvider>
     );
 };
